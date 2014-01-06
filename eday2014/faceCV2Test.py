@@ -1,26 +1,29 @@
 import cv2
+import cv2.cv as cv
 import numpy as np
 
-face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+if __name__ == "__main__":
 
-c = cv2.VideoCapture(1)
+    face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
-while(1):
-    _,im = c.read()
-    #gray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
+    c = cv2.VideoCapture(1)
 
-    faces = face_cascade.detectMultiScale(im, 1.3, 5)
-    for (x,y,w,h) in faces:
-        cv2.rectangle(im,(x,y),(x+w,y+h),(255,0,0),1)
-        #roi_gray = gray[y:y+h, x:x+w]
-        #roi_color = im[y:y+h, x:x+w]
+    while(1):
+        _,im = c.read()
 
-    
-    cv2.flip(im, 1, im)
+        faces = face_cascade.detectMultiScale(im, scaleFactor=1.3, minNeighbors=4, minSize=(30, 30), flags = cv.CV_HAAR_SCALE_IMAGE)
+        
+        for (x,y,w,h) in faces:
+            cv2.rectangle(im,(x,y),(x+w,y+h),(255,0,0),1)
+       
+        cv2.flip(im, 1, im)
 
-    cv2.imshow('e2', im)
-    
-    if cv2.waitKey(5)==27:
-        break
-    
-cv2.destroyAllWindows()
+        cv2.imshow('e2', im)
+
+        k = cv2.waitKey(1)
+        
+        if k == 0x1b:
+            break
+        
+    c.release()    
+    cv2.destroyAllWindows()
