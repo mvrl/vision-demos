@@ -15,7 +15,7 @@ if __name__ == "__main__":
         gray = cv2.cvtColor(im,cv2.COLOR_BGR2GRAY)
         gray = cv2.medianBlur(gray,7)
         
-        faces = face_cascade.detectMultiScale(im, scaleFactor=1.3, minNeighbors=4, minSize=(30, 30), flags = cv.CV_HAAR_SCALE_IMAGE)
+        faces = face_cascade.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=4, minSize=(30, 30), flags = cv.CV_HAAR_SCALE_IMAGE)
 
         circles = cv2.HoughCircles(gray, cv.CV_HOUGH_GRADIENT, 1.5, 20, param1=200, param2=100, minRadius=0, maxRadius=0)
         #circles = np.uint16(np.around(circles))
