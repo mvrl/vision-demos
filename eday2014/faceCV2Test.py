@@ -19,8 +19,8 @@ if __name__ == "__main__":
         for (x,y,w,h) in faces:
             cv2.rectangle(im,(x,y),(x+w,y+h),(255,0,0),1)
 
-        circles = cv2.HoughCircles(gray,cv.CV_HOUGH_GRADIENT,1,20,param1=50,param2=30,minRadius=0,maxRadius=0)
-        circles = np.uint16(np.around(circles))
+        circles = cv2.HoughCircles(gray, cv.CV_HOUGH_GRADIENT, 1, 20, param1=100, param2=100, minRadius=0, maxRadius=0)
+        #circles = np.uint16(np.around(circles))
 
         for i in circles[0,:]:
             cv2.circle(im,(i[0],i[1]),i[2],(0,255,0),2)
