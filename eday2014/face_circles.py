@@ -4,14 +4,14 @@ import numpy as np
 
 if __name__ == "__main__":
 
+    # Break everything down into functions
+
     face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
     c = cv2.VideoCapture(1)
 
     while(1):
         _,im = c.read()
-        #gray = im
-        #cv.CvtColor(im, gray, cv.CV_BGR2GRAY)
         gray = cv2.cvtColor(im,cv2.COLOR_BGR2GRAY)
         gray = cv2.medianBlur(gray,7)
         
@@ -28,8 +28,8 @@ if __name__ == "__main__":
                 cv2.circle(im,(i[0],i[1]),i[2],(0,255,0),2)
                 cv2.circle(im,(i[0],i[1]),2,(0,0,255),3)
         except (ValueError, TypeError):
-            print 'no circles'
-            
+            pass
+                        
         cv2.flip(im, 1, im)
 
         cv2.imshow('e2', im)
