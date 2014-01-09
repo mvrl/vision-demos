@@ -13,9 +13,9 @@ src_pts[2,0] = (272,322)
 src_pts[3,0] = (494,436)
 
 dest_pts[0,0] = (0,0)
-dest_pts[1,0] = (480,0)
-dest_pts[2,0] = (0,480)
-dest_pts[3,0] = (480,480)
+dest_pts[1,0] = (520,0)
+dest_pts[2,0] = (0,520)
+dest_pts[3,0] = (520,520)
 
 src_pts = np.array(src_pts)
 dest_pts = np.array(dest_pts)
