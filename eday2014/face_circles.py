@@ -2,11 +2,15 @@ import cv2
 import cv2.cv as cv
 import numpy as np
 
+# Global variables
 global src_pts
 global count
 count = 0
 src_pts = cv2.cv.CreateMat(4,1,cv2.CV_64FC2)
 
+# Mouse callback function
+# Checks if the event is a left click
+# Records the image coordinates if so
 def getPoint(event,x,y,flags,param):
     if event == cv2.EVENT_LBUTTONDOWN:
         global src_pts
@@ -66,30 +70,34 @@ if __name__ == "__main__":
     # Opens the webcam
     c = cv2.VideoCapture(1)
 
+    # Loop to set up the calibration
     while(1):
+        # Grab next frame
         calibIm,_ = setupImages(c)
 
-        #cv2.flip(calibIm,1,calibIm)
-        
+        # Set up the window and display the image
         cv2.namedWindow('Calibrate')
         cv.SetMouseCallback('Calibrate',getPoint)
-
         cv2.imshow('Calibrate',calibIm)
-        
+
+        # Wait until the user hits a key
         k = cv2.waitKey(0)
         if k == 0x1b:
             cv2.destroyAllWindows()
             break
 
+    # Set up the destination coordinates
     dest_pts = cv2.cv.CreateMat(4,1,cv2.CV_64FC2)
     dest_pts[0,0] = (0,0)
     dest_pts[1,0] = (940,0)
     dest_pts[2,0] = (0,460)
     dest_pts[3,0] = (940,460)
 
+    # Convert the point arrays to numpy arrays
     src_pts = np.array(src_pts)
     dest_pts = np.array(dest_pts)
 
+    # Calculate the homography between the image and the camera
     M,mask = cv2.findHomography(src_pts, dest_pts, cv2.RANSAC, 5.0)
 
     # Main loop to detect faces/circles on the webcam stream
