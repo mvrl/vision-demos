@@ -2,6 +2,18 @@ import cv2
 import cv2.cv as cv
 import numpy as np
 
+global src_pts
+global count
+count = 0
+src_pts = cv2.cv.CreateMat(4,1,cv2.CV_64FC2)
+
+def getPoint(event,x,y,flags,param):
+    if event == cv2.EVENT_LBUTTONDOWN:
+        global src_pts
+        global count
+        src_pts[count,0] = (x,y)
+        count = count + 1
+
 # Sets up the images to be processed and displayed
 # Grabs the next from the webcam and converts it
 # to gray scale for processing
@@ -54,10 +66,41 @@ if __name__ == "__main__":
     # Opens the webcam
     c = cv2.VideoCapture(1)
 
+    while(1):
+        calibIm,_ = setupImages(c)
+
+        #cv2.flip(calibIm,1,calibIm)
+        
+        cv2.namedWindow('Calibrate')
+        cv.SetMouseCallback('Calibrate',getPoint)
+
+        cv2.imshow('Calibrate',calibIm)
+        
+        k = cv2.waitKey(0)
+        if k == 0x1b:
+            cv2.destroyAllWindows()
+            break
+
+    dest_pts = cv2.cv.CreateMat(4,1,cv2.CV_64FC2)
+    dest_pts[0,0] = (0,0)
+    dest_pts[1,0] = (940,0)
+    dest_pts[2,0] = (0,460)
+    dest_pts[3,0] = (940,460)
+
+    src_pts = np.array(src_pts)
+    dest_pts = np.array(dest_pts)
+
+    M,mask = cv2.findHomography(src_pts, dest_pts, cv2.RANSAC, 5.0)
+
     # Main loop to detect faces/circles on the webcam stream
     while(1):
         # Set up images
         im,gray = setupImages(c)
+
+        #cv2.flip(im, 1, im)
+
+        im = cv2.warpPerspective(im,M,(900,900))
+        gray = cv2.warpPerspective(gray,M,(900,900))
 
         # Detect Faces
         detectFaces(gray,im)
@@ -66,7 +109,7 @@ if __name__ == "__main__":
         detectCircles(gray,im)
 
         # Flip the image horizontally and display it
-        cv2.flip(im, 1, im)
+        
         cv2.imshow('e2', im)
 
         # Wait until the escape key is pressed
