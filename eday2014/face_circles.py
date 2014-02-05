@@ -27,7 +27,7 @@ def setupImages(c):
 
     # Convert the image to gray scale and blur it
     gray = cv2.cvtColor(im,cv2.COLOR_BGR2GRAY)
-    gray = cv2.medianBlur(gray,7)
+    #gray = cv2.medianBlur(gray,7)
     
     return im,gray
 
@@ -68,7 +68,7 @@ if __name__ == "__main__":
     face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
     # Opens the webcam
-    c = cv2.VideoCapture(1)
+    c = cv2.VideoCapture(0)
 
     # Loop to set up the calibration
     while(1):
@@ -110,8 +110,11 @@ if __name__ == "__main__":
         im = cv2.warpPerspective(im,M,(900,900))
         gray = cv2.warpPerspective(gray,M,(900,900))
 
+        im = im[0:460, 0:940]
+        gray = gray[0:460, 0:940]
+
         # Detect Faces
-        detectFaces(gray,im)
+        #detectFaces(gray,im)
 
         # Detect Circles
         detectCircles(gray,im)
